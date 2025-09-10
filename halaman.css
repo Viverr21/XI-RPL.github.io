@@ -1,0 +1,279 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #0f172a;
+  color: #e0e7ff;
+  overflow-x: hidden;
+}
+  /* Floating gradient circles */
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  z-index: 0;
+}
+.circle1 {
+  width: 280px;
+  height: 280px;
+  background: linear-gradient(135deg, #ec4899, #f43f5e);
+  top: 10%;
+  left: 5%;
+  animation-name: float1;
+  animation-duration: 8s;
+}
+.circle2 {
+  width: 320px;
+  height: 320px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  top: 40%;
+  right: 10%;
+  animation-name: float2;
+  animation-duration: 10s;
+}
+.circle3 {
+  width: 220px;
+  height: 220px;
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+  bottom: 15%;
+  left: 20%;
+  animation-name: float3;
+  animation-duration: 9s;
+}
+@keyframes float1 {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-25px) translateX(15px);
+    opacity: 0.5;
+  }
+}
+@keyframes float2 {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(20px) translateX(-20px);
+    opacity: 0.5;
+  }
+}
+@keyframes float3 {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-20px) translateX(10px);
+    opacity: 0.5;
+  }
+}
+/* Header underline animation */
+.underline-animated {
+  position: relative;
+  display: inline-block;
+  cursor: default;
+}
+.underline-animated::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background: #ec4899;
+  bottom: 0;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s ease;
+  border-radius: 2px;
+}
+.underline-animated:hover::after,
+.underline-animated:focus::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+  /* Card hover effect */
+.struktur-kelas {
+  display: flex;
+  grid-template-columns: repeat(2, 200px); /* 2 kolom fix */
+  gap: 10px 300px; /* row-gap, col-gap */
+  justify-content: center; /* BIKIN GRID TETAP DI TENGAH */
+  text-align: center;
+}
+.project-card {
+  background: rgba(255 255 255 / 0.05);
+  backdrop-filter: saturate(180%) blur(10px);
+  border-radius: 50%;
+  box-shadow: 0 8px 32px 0 rgba(236, 72, 153, 0.25);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  justify-content: center;
+  gap: 50px 500px;
+  z-index: 10;
+  width: 290px;
+  height: 290px;
+  display: flex;
+  margin: 40px;
+  margin-bottom: 24px;
+  flex-direction: column;
+  
+}
+.project-card .wali {
+  grid-column: span 2;
+  justify-self: center;
+  text-align: center;
+  padding: 24px;
+}
+.project-card .div {
+  width: 290;
+  height: 290;
+}
+.project-card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 20px 40px 0 rgba(236, 72, 153, 0.5);
+  z-index: 10;
+}
+.project-image-wrapper {
+  overflow: hidden;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+}
+.project-image-wrapper img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.project-card:hover .project-image-wrapper img {
+  transform: scale(1.1);
+}
+  /* Button gradient and shine */
+.btn-gradient {
+  background: linear-gradient(90deg, #ec4899, #f43f5e);
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 15px rgba(244, 13, 63, 0.6);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+}
+.btn-gradient:hover {
+  background: linear-gradient(90deg, #f43f5e, #ec4899);
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.8);
+}
+.btn-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.7s ease;
+  z-index: 1;
+}
+.btn-gradient:hover::before {
+  left: 125%;
+}
+  /* Section fade-in animation */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation-fill-mode: forwards;
+  animation-name: fadeInUp;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes fadeInUp {
+  to {
+  opacity: 1;
+  transform: translateY(0);
+  }
+}
+  /* Smooth scroll for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+  /* Responsive grid for projects */
+@media (min-width: 640px) {
+.projects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+.projects-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 768px) {
+  .project-card {
+    width: 200px;
+    height: 200px;
+    font-size: 15px;
+  }
+  .project-card img {
+    width: 150px;
+    height: 100px;
+  }
+  .project-card span {
+    font-size: 12px;
+  }
+}
+
+.close {
+  color: rgb(13, 175, 224);
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#struktur-anggota {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+.anggota {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: saturate(180%) blur(10px);
+  border-radius: 10%;
+  box-shadow: 0 8px 32px 0 rgba(236, 72, 153, 0.25);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  cursor: pointer;
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.anggota:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgb(68, 26, 255);
+}
+#struktur-kelas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  
+}

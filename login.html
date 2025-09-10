@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="bg-shapes" aria-hidden="true">
+    <div class="orbit o1"></div>
+    <div class="orbit o2"></div>
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <main class="card" role="main" aria-labelledby="title">
+    <div class="logo">
+      <div class="mark" ><img src="Screenshot 2025-09-08 202349.png" width="60"></div>
+      <div class="container-center">
+        <div style="font-weight:600">XI-RPL</div>
+        <div style="font-size:12px;color:var(--muted)">Selamat datang di wbsite XI-RPL</div>
+      </div>
+    </div>
+
+    <h1 id="title">Masukan Username & Password</h1>
+    <p class="lead"></p>
+
+    <form id="loginForm" autocomplete="on" novalidate>
+  <div class="field">
+    <input id="username" type="text" placeholder="Username" required />
+    <label for="username" class="floating">username</label>
+  </div>
+
+  <div class="field">
+    <div class="pass-wrap">
+      <input id="password" type="password" placeholder="Password" required />
+      <label for="password" class="floating">password</label>
+      <button type="button" class="show-pass" id="togglePass" aria-label="Tampilkan kata sandi">👁️</button>
+    </div>
+  </div>
+
+  <button class="btn" type="submit">Masuk</button>
+</form>
+
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="check">
+    <div class="circle" id="checkCircle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
+    </div>
+    <div style="font-weight:600">Berhasil masuk!</div>
+    <div style="color:var(--muted); font-size:13px">Mengalihkan ke Kelas...</div>
+  </div>
+</div>
+    <div class="credit">© Rekayasa Perangkat Lunak</div>
+  </main>
+  <script src="login.js"></script>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCMgIEZUAnfw_GjYp8DLYbtjBMb0jWmzEA",
+    authDomain: "kelasxi-rpl.firebaseapp.com",
+    projectId: "kelasxi-rpl",
+    storageBucket: "kelasxi-rpl.firebasestorage.app",
+    messagingSenderId: "919145181594",
+    appId: "1:919145181594:web:86a8c193de425f9ec8ca23",
+    measurementId: "G-YL208SBNJL"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jadwal Pelajaran</title>
+  <style>
+    #jadwalPelajaranTable {
+  text-align: center;
+  background: #f0fff0;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 1000px;
+  margin: 40px auto;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  animation: fadeIn 1s ease-in-out;
+}
+
+#jadwalPelajaranTable h1 {
+  font-size: 28px;
+  color: #0077cc;
+  margin-bottom: 10px;
+}
+
+.pelajaran-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.pelajaran-table th, .pelajaran-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.pelajaran-table th {
+  background: #99ccff;
+  color: #222;
+}
+
+.pelajaran-table tbody tr {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.pelajaran-table tbody tr:nth-child(1) { animation-delay: 0.2s; }
+.pelajaran-table tbody tr:nth-child(2) { animation-delay: 0.4s; }
+.pelajaran-table tbody tr:nth-child(3) { animation-delay: 0.6s; }
+.pelajaran-table tbody tr:nth-child(4) { animation-delay: 0.8s; }
+.pelajaran-table tbody tr:nth-child(5) { animation-delay: 1s; }
+.pelajaran-table tbody tr:nth-child(6) { animation-delay: 1.2s; }
+.pelajaran-table tbody tr:nth-child(7) { animation-delay: 1.4s; }
+.pelajaran-table tbody tr:nth-child(8) { animation-delay: 1.6s; }
+.pelajaran-table tbody tr:nth-child(9) { animation-delay: 1.8s; }
+.pelajaran-table tbody tr:nth-child(10){ animation-delay: 2s; }
+.pelajaran-table tbody tr:nth-child(11){ animation-delay: 2.2s; }
+.pelajaran-table tbody tr:nth-child(12){ animation-delay: 2.4s; }
+.pelajaran-table tbody tr:nth-child(13){ animation-delay: 2.6s; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Container agar bisa digeser horizontal di HP */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Tabel responsive */
+.pelajaran-table {
+  min-width: 800px; /* biar kolom ga terlalu sempit */
+}
+
+/* Atur ukuran font di HP */
+@media (max-width: 768px) {
+  .pelajaran-table th, 
+  .pelajaran-table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+  #jadwalPelajaranTable h1 {
+    font-size: 20px;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <section id="jadwalPelajaranTable">
+  <h1>📚 Jadwal Pelajaran XI RPL</h1>
+  <p>Wali Kelas: Siti Fadilah</p>
+
+  <div class="table-container">
+    <table class="pelajaran-table">
+      <thead>
+      <tr>
+        <th></th>
+        <th>1<br>06:30 - 07:00</th>
+        <th>2<br>07:00 - 07:40</th>
+        <th>3<br>07:40 - 08:15</th>
+        <th>4<br>08:15 - 08:50</th>
+        <th>5<br>08:50 - 09:25</th>
+        <th>Istirahat<br>09:25 - 09:40</th>
+        <th>6<br>09:40 - 10:15</th>
+        <th>7<br>10:15 - 10:50</th>
+        <th>8<br>10:50 - 11:25</th>
+        <th>9<br>11:25 - 12:00</th>
+        <th>Istirahat<br>12:00 - 12:30</th>
+        <th>10<br>12:30 - 13:05</th>
+        <th>11<br>13:05 - 13:40</th>
+        <th>12<br>13:40 - 14:15</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Senin</td>
+        <td>Upacara</td>
+        <td>PSS</td>
+        <td colspan="3">Bahasa Inggris</td>
+        <td rowspan="5">Istirahat</td>
+        <td colspan="4">Pemerograman WEB</td>
+        <td rowspan="5">Istirahat</td>
+        <td colspan="2">PPKN</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Selasa</td>
+        <td rowspan="3"></td>
+        <td colspan="2">PKK</td>
+        <td colspan="2">Pemerograman ANDROID</td>
+        <td colspan="2">Pemerograman ANDROID</td>
+        <td colspan="2">Basis Data</td>
+        <td colspan="3">Basis Data</td>
+      </tr>
+      <tr>
+        <td>Rabu</td>
+        <td colspan="2">PAI</td>
+        <td colspan="2">Olahraga</td>
+        <td colspan="2">Bahasa Korea</td>
+        <td colspan="2">Sejarah</td>
+        <td colspan="3">Matematika</td>
+      </tr>
+      <tr>
+        <td>Kamis</td>
+        <td colspan="3">PKKTKJ</td>
+        <td>Bahasa Indonesia</td>
+        <td colspan="2">Bahasa Indonesia</td>
+        <td colspan="2">Basis Data</td>
+        <td colspan="2">Basis Data</td>
+        <td>BK</td>
+      </tr>
+      <tr>
+        <td>Jum'at</td>
+        <td>Ruang AKT</td>
+        <td>PSS</td>
+        <td colspan="3">Pemerograman WEB</td>
+        <td colspan="2">Pemerograman WEB</td>
+        <td>BWK</td>
+      </tr>
+    </tbody>
+    </table>
+  </div>
+</section>
+</body>
+</html>

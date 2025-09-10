@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jadwal Piket</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ffe5b4, #ffc1cc);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Container */
+    #jadwalPiketPoster {
+      text-align: center;
+      background: #fffbea;
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 900px;
+      margin: 40px auto;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    /* Judul animasi ketikan */
+    #jadwalPiketPoster h1 {
+      font-size: 32px;
+      color: #ff6600;
+      margin-bottom: 10px;
+      overflow: hidden;
+      border-right: .15em solid orange;
+      white-space: nowrap;
+      margin: 0 auto;
+      letter-spacing: .05em;
+      animation: typing 3s steps(30, end), blink-caret .75s step-end infinite;
+      width: fit-content;
+    }
+
+    #jadwalPiketPoster p {
+      margin: 5px 0;
+      color: #444;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 1.5s;
+    }
+
+    /* Grid */
+    .piket-grid.top {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .piket-grid.bottom {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    /* Card */
+    .piket-card {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      min-width: 180px;
+      min-height: 150px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transform: translateY(50px);
+      opacity: 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .piket-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+
+    /* Animasi delay tiap card */
+    .piket-card:nth-child(1) { animation-delay: 0.5s; }
+    .piket-card:nth-child(2) { animation-delay: 0.8s; }
+    .piket-card:nth-child(3) { animation-delay: 1.1s; }
+    .bottom .piket-card:nth-child(1) { animation-delay: 1.4s; }
+    .bottom .piket-card:nth-child(2) { animation-delay: 1.7s; }
+
+    .piket-card h3 {
+      color: white;
+      padding: 6px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* Warna label tiap hari */
+    .piket-card.senin   h3  { background: #ff7f50; }
+    .piket-card.selasa  h3  { background: #32cd32; }
+    .piket-card.rabu    h3  { background: #ffcc00; }
+    .piket-card.kamis   h3  { background: #3010e8; }
+    .piket-card.jumat   h3  { background: #ff69b4; }
+
+    .piket-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .piket-card li {
+      margin: 5px 0;
+      color: #333;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateX(-20px);
+      animation: fadeSlide 0.5s ease forwards;
+    }
+
+    /* Delay tiap li */
+    .piket-card li:nth-child(1) { animation-delay: 2s; }
+    .piket-card li:nth-child(2) { animation-delay: 2.2s; }
+    .piket-card li:nth-child(3) { animation-delay: 2.4s; }
+    .piket-card li:nth-child(4) { animation-delay: 2.6s; }
+    .piket-card li:nth-child(5) { animation-delay: 2.8s; }
+    .piket-card li:nth-child(6) { animation-delay: 3.0s; }
+    .piket-card li:nth-child(7) { animation-delay: 3.2s; }
+
+    .catatan {
+      margin-top: 20px;
+      background: #fff;
+      border: 2px dashed #ff6600;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: left;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 2.8s;
+    }
+
+    /* Keyframes */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: orange; }
+    }
+  </style>
+</head>
+<body>
+  <section id="jadwalPiketPoster">
+    <h1>🧹 Jadwal Piket Kelas</h1>
+    <p>Kelas: XI RPL </p>
+    <p>Wali Kelas: Siti Fadilah</p>
+
+    <div class="piket-grid top">
+      <div class="piket-card senin">
+        <h3>Senin</h3>
+        <ul>
+          <li>Abidal</li>
+          <li>Dinda</li>
+          <li>Nazwa</li>
+          <li>Rapka</li>
+          <li>Ricky</li>
+          <li>Suci</li>
+          <li>Vilga</li>
+        </ul>
+      </div>
+      <div class="piket-card selasa">
+        <h3>Selasa</h3>
+        <ul>
+          <li>Alya</li>
+          <li>Denisa</li>
+          <li>Haikal</li>
+          <li>Ihsan</li>
+          <li>Oka</li>
+          <li>Satria</li>
+          <li>Yuda</li>
+        </ul>
+      </div>
+      <div class="piket-card rabu">
+        <h3>Rabu</h3>
+        <ul>
+          <li>Alfi</li>
+          <li>Andika</li>
+          <li>Candy</li>
+          <li>Diana</li>
+          <li>Monicka</li>
+          <li>Pradicka</li>
+          <li>Revan</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="piket-grid bottom">
+      <div class="piket-card kamis">
+        <h3>Kamis</h3>
+        <ul>
+          <li>Azka</li>
+          <li>Bagus</li>
+          <li>Becky</li>
+          <li>Farhan</li>
+          <li>Wini</li>
+          <li>Rizky</li>
+        </ul>
+      </div>
+      <div class="piket-card jumat">
+        <h3>Jumat</h3>
+        <ul>
+          <li>Givanes</li>
+          <li>Revansha</li>
+          <li>Nela</li>
+          <li>Lutfi</li>
+          <li>Gerani</li>
+          <li>Bhesti</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="catatan">
+      <h3>Catatan:</h3>
+      <p>Piket Kalau Kelas Kotor.</p>
+    </div>
+  </section>
+</body>
+</html>
