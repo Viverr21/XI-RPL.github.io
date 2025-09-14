@@ -7,15 +7,15 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #ffe5b4, #ffc1cc);
       margin: 0;
       padding: 0;
+      background: url(poto/agustus.jpg) no-repeat center center/cover;
     }
 
     /* Container */
     #jadwalPiketPoster {
       text-align: center;
-      background: #fffbea;
+      background: rgba(0,0,0,0.6);
       border-radius: 12px;
       padding: 30px;
       max-width: 900px;
@@ -27,10 +27,10 @@
     /* Judul animasi ketikan */
     #jadwalPiketPoster h1 {
       font-size: 32px;
-      color: #ff6600;
+      color: rgb(91, 69, 232);
       margin-bottom: 10px;
       overflow: hidden;
-      border-right: .15em solid orange;
+      border-right: .15em solid rgb(245, 178, 78);
       white-space: nowrap;
       margin: 0 auto;
       letter-spacing: .05em;
@@ -40,7 +40,7 @@
 
     #jadwalPiketPoster p {
       margin: 5px 0;
-      color: #444;
+      color: #343cd4;
       opacity: 0;
       animation: fadeInUp 1s ease forwards;
       animation-delay: 1.5s;
@@ -62,7 +62,7 @@
 
     /* Card */
     .piket-card {
-      background: white;
+      background: rgba(0,0,0,0.50);
       border-radius: 12px;
       padding: 15px;
       min-width: 180px;
@@ -76,7 +76,7 @@
 
     .piket-card:hover {
       transform: scale(1.05);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 16px rgba(33, 191, 215, 0.964);
     }
 
     /* Animasi delay tiap card */
@@ -87,18 +87,18 @@
     .bottom .piket-card:nth-child(2) { animation-delay: 1.7s; }
 
     .piket-card h3 {
-      color: white;
+      color: rgb(36, 230, 153);
       padding: 6px;
       border-radius: 8px;
       margin-bottom: 10px;
     }
 
     /* Warna label tiap hari */
-    .piket-card.senin   h3  { background: #ff7f50; }
-    .piket-card.selasa  h3  { background: #32cd32; }
-    .piket-card.rabu    h3  { background: #ffcc00; }
-    .piket-card.kamis   h3  { background: #3010e8; }
-    .piket-card.jumat   h3  { background: #ff69b4; }
+    .piket-card.senin   h3  { background: rgba(0,0,0,1); }
+    .piket-card.selasa  h3  { background: rgba(0,0,0,1); }
+    .piket-card.rabu    h3  { background: rgba(0,0,0,1); }
+    .piket-card.kamis   h3  { background: rgba(0,0,0,1); }
+    .piket-card.jumat   h3  { background: rgba(0,0,0,1); }
 
     .piket-card ul {
       list-style: none;
@@ -108,7 +108,7 @@
 
     .piket-card li {
       margin: 5px 0;
-      color: #333;
+      color: #17b9dd;
       font-weight: 500;
       opacity: 0;
       transform: translateX(-20px);
@@ -125,8 +125,9 @@
     .piket-card li:nth-child(7) { animation-delay: 3.2s; }
 
     .catatan {
+      color: aqua;
       margin-top: 20px;
-      background: #fff;
+      background: rgba(0,0,0,0.80);
       border: 2px dashed #ff6600;
       padding: 15px;
       border-radius: 8px;
@@ -155,7 +156,7 @@
     }
     @keyframes blink-caret {
       from, to { border-color: transparent }
-      50% { border-color: orange; }
+      50% { border-color: rgb(91, 69, 232); }
     }
   </style>
 </head>
