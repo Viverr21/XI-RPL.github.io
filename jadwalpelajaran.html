@@ -5,9 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jadwal Pelajaran</title>
   <style>
-    #jadwalPelajaranTable {
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  background: url(poto/olahraga.jpg) no-repeat center center/cover;
+  color: var(--text);
+}
+
+#jadwalPelajaranTable {
   text-align: center;
-  background: #f0fff0;
+  background: rgba(0,0,0,0.4);
   border-radius: 12px;
   padding: 30px;
   max-width: 1000px;
@@ -26,21 +38,21 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  background: white;
+  background: rgba(0,0,0,0.15);
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .pelajaran-table th, .pelajaran-table td {
-  border: 1px solid #ddd;
   padding: 10px;
   font-size: 14px;
+  color: aqua;
 }
 
 .pelajaran-table th {
-  background: #99ccff;
-  color: #222;
+  background: rgba(0,0,0,0.4);
+  color: #ff00f2f3;
 }
 
 .pelajaran-table tbody tr {
