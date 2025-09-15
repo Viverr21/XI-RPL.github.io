@@ -1,151 +1,129 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Galeri XI-RPL</title>
-  <script src="https://unpkg.com/@supabase/supabase-js"></script>
   <style>
     body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      text-align: center;
       margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #141e30, #243b55);
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
+      padding: 20px;
     }
 
     h1 {
-      margin: 20px 0;
-      font-size: 2.5rem;
-      background: linear-gradient(to right, #00c6ff, #0072ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: fadeInDown 1s ease;
-    }
-
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+      margin-bottom: 20px;
     }
 
     .upload-box {
-      background: rgba(255, 255, 255, 0.1);
+      margin: 20px auto;
       padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-      text-align: center;
-      margin-bottom: 30px;
-      animation: fadeIn 1s ease;
-    }
-
-    .upload-box input[type="file"] {
-      margin: 10px 0;
-    }
-
-    .upload-box button {
-      background: linear-gradient(90deg, #00c6ff, #0072ff);
-      border: none;
-      padding: 10px 20px;
-      border-radius: 25px;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .upload-box button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 114, 255, 0.5);
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      width: 300px;
     }
 
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      width: 90%;
-      max-width: 1000px;
-      margin-bottom: 40px;
+      gap: 15px;
+      margin-top: 30px;
     }
 
-    .card {
-      position: relative;
+    .gallery-item {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
       overflow: hidden;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      animation: fadeInUp 0.8s ease;
+      transition: transform 0.3s ease;
     }
 
-    .card:hover {
-      transform: translateY(-8px) scale(1.05);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    .gallery-item:hover {
+      transform: scale(1.05);
     }
 
-    .card img, .card video {
+    img, video {
       width: 100%;
-      height: 200px;
-      object-fit: cover;
+      height: auto;
       display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
+  <h1>📸 Galeri XI-RPL</h1>
+
+  <div class="upload-box">
+    <input type="file" id="fileInput" />
+    <button id="uploadBtn">Upload</button>
+  </div>
+
   <div class="gallery" id="gallery"></div>
-<input type="file" id="fileInput" />
-<button id="uploadBtn">Upload</button>
 
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  const supabase = createClient(
-    "https://uuzhhkjzjdwbjhbhhpvk.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1emhoa2p6amR3YmpoYmhocHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5MzY0NTksImV4cCI6MjA3MzUxMjQ1OX0.lYWtAd7-Tw7he6Q3AvIOShC9e76TDsq_WhClbd-GrM4"
-  );
+    // Ganti dengan URL & Key dari Supabase project kamu
+    const supabase = createClient(
+      "https://uuzhhkjzjdwbjhbhhpvk.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1emhoa2p6amR3YmpoYmhocHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5MzY0NTksImV4cCI6MjA3MzUxMjQ1OX0.lYWtAd7-Tw7he6Q3AvIOShC9e76TDsq_WhClbd-GrM4"
+    );
 
-  document.getElementById("uploadBtn").addEventListener("click", async () => {
-    const fileInput = document.getElementById("fileInput");
-    const file = fileInput.files[0];
-    if (!file) return alert("Pilih file dulu!");
+    const bucketName = "uploads";
 
-    const { data, error } = await supabase.storage
-      .from("uploads")
-      .upload(`public/${file.name}`, file, {
-        cacheControl: "3600",
-        upsert: true
+    // Upload file
+    document.getElementById("uploadBtn").addEventListener("click", async () => {
+      const file = document.getElementById("fileInput").files[0];
+      if (!file) return alert("Pilih file dulu!");
+
+      const { data, error } = await supabase.storage
+        .from(bucketName)
+        .upload(`public/${Date.now()}-${file.name}`, file, { upsert: true });
+
+      if (error) {
+        alert("Gagal upload: " + error.message);
+      } else {
+        alert("Upload berhasil!");
+        loadGallery();
+      }
+    });
+
+    // Ambil semua file di bucket & tampilkan
+    async function loadGallery() {
+      const { data, error } = await supabase.storage.from(bucketName).list("public", {
+        limit: 100,
+        offset: 0,
       });
 
-    if (error) {
-      alert("Gagal upload: " + error.message);
-    } else {
-      const { data: publicUrl } = supabase.storage
-        .from("uploads")
-        .getPublicUrl(`public/${file.name}`);
+      if (error) {
+        console.error("Error load:", error.message);
+        return;
+      }
 
-      alert("Upload berhasil!");
-      console.log(publicUrl.publicUrl);
+      const gallery = document.getElementById("gallery");
+      gallery.innerHTML = "";
 
-      // tampilkan di halaman
-      const img = document.createElement("img");
-      img.src = publicUrl.publicUrl;
-      img.width = 200;
-      document.body.appendChild(img);
+      data.forEach((file) => {
+        const { data: publicUrl } = supabase.storage
+          .from(bucketName)
+          .getPublicUrl(`public/${file.name}`);
+
+        const div = document.createElement("div");
+        div.className = "gallery-item";
+
+        if (file.name.match(/\.(mp4|webm|ogg)$/i)) {
+          div.innerHTML = `<video src="${publicUrl.publicUrl}" controls></video>`;
+        } else {
+          div.innerHTML = `<img src="${publicUrl.publicUrl}" alt="${file.name}" />`;
+        }
+
+        gallery.appendChild(div);
+      });
     }
-  });
+
+    // Load awal
+    loadGallery();
+  </script>
 </body>
 </html>
-
