@@ -79,7 +79,7 @@
 
       const { data, error } = await supabase.storage
         .from(bucketName)
-        .upload(`public/${Date.now()}-${file.name}`, file, { upsert: true });
+        .upload(`${Date.now()}-${file.name}`, file, { upsert: true });
 
       if (error) {
         alert("Gagal upload: " + error.message);
@@ -107,7 +107,7 @@
       data.forEach((file) => {
         const { data: publicUrl } = supabase.storage
           .from(bucketName)
-          .getPublicUrl(`public/${file.name}`);
+          .getPublicUrl(`${file.name}`);
 
         const div = document.createElement("div");
         div.className = "gallery-item";
@@ -127,3 +127,4 @@
   </script>
 </body>
 </html>
+
