@@ -1,81 +1,38 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Galeri Animasi Dinamis</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #6a0572);
-      background-size: 400% 400%;
-      animation: gradientMove 12s ease infinite;
+<h2>Upload Foto</h2>
+<input type="file" id="fileInput">
+<button onclick="handleUpload()">Upload</button>
+
+<h2>Galeri</h2>
+<div id="gallery"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js"></script>
+<script src="src/storage.js"></script>
+<script>
+  async function handleUpload() {
+    const file = document.getElementById('fileInput').files[0];
+    if (!file) return alert("Pilih file dulu!");
+
+    const url = await uploadFile(file);
+    if (url) {
+      alert("Berhasil upload!");
+      loadGallery();
     }
+  }
 
-    @keyframes gradientMove {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
+  async function loadGallery() {
+    const galleryDiv = document.getElementById('gallery');
+    galleryDiv.innerHTML = "";
 
-    .gallery-item {
-      animation: floaty 6s ease-in-out infinite;
-      transition: transform 0.5s ease, box-shadow 0.5s ease;
-    }
+    const files = await listFiles();
+    files.forEach(url => {
+      const img = document.createElement("img");
+      img.src = url;
+      img.style.width = "200px";
+      img.style.margin = "5px";
+      galleryDiv.appendChild(img);
+    });
+  }
 
-    .gallery-item:hover {
-      transform: rotateY(8deg) scale(1.1);
-      box-shadow: 0 15px 30px rgba(0, 255, 255, 0.8);
-    }
-
-    @keyframes floaty {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-
-    video, img {
-      border-radius: 15px;
-    }
-  </style>
-</head>
-<body class="min-h-screen flex flex-col items-center text-white">
-
-  <h1 class="text-5xl font-extrabold mt-10 drop-shadow-lg">🌌 Galeri XI-RPL 🌌</h1>
-  <p class="mt-2 text-gray-300 text-lg italic">Kumpulan foto & video penuh animasi</p>
-
-  <!-- Upload Section -->
-  <div class="upload mt-6">
-    <input type="file" id="fileInput" accept="image/*,video/*" multiple class="p-2 rounded bg-gray-800 text-sm">
-    <button onclick="uploadFiles()" class="ml-2 px-5 py-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400 hover:scale-105 transition">Upload 🚀</button>
-  </div>
-
-  <!-- Gallery -->
-  <div id="gallery" class="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-11/12 max-w-6xl"></div>
-
-  <script>
-    function uploadFiles() {
-      const input = document.getElementById("fileInput");
-      const gallery = document.getElementById("gallery");
-
-      for (const file of input.files) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const div = document.createElement("div");
-          div.className = "gallery-item bg-black/40 backdrop-blur-md p-3 rounded-xl";
-          div.style.animationDelay = `${Math.random() * 2}s`; // delay random biar ga serentak
-
-          if (file.type.startsWith("image/")) {
-            div.innerHTML = `<img src="${e.target.result}" class="w-full h-auto shadow-lg">`;
-          } else if (file.type.startsWith("video/")) {
-            div.innerHTML = `<video controls class="w-full"><source src="${e.target.result}" type="${file.type}"></video>`;
-          }
-
-          gallery.appendChild(div);
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-  </script>
-</body>
-</html>
-
+  // Load galeri saat halaman dibuka
+  loadGallery();
+</script>
