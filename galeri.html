@@ -19,6 +19,32 @@
       animation: fadeInDown 1s ease-in-out;
     }
 
+    .upload-box {
+      margin: 20px auto;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      display: inline-block;
+    }
+
+    input[type="file"] {
+      margin: 10px 0;
+    }
+
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #1db954;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #17a44d;
+    }
+
     #gallery {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -58,6 +84,12 @@
 </head>
 <body>
   <h1>Galeri Foto</h1>
+
+  <div class="upload-box">
+    <input type="file" id="fileInput" accept="image/*">
+    <button onclick="uploadFile()">Upload</button>
+  </div>
+
   <div id="gallery"></div>
 
   <script type="module">
@@ -70,7 +102,7 @@
 
     async function loadGallery() {
       const { data, error } = await supabase.storage
-        .from("uploads") // bucket name
+        .from("uploads")
         .list("", { limit: 100, sortBy: { column: "created_at", order: "desc" } });
 
       if (error) {
@@ -89,10 +121,28 @@
 
         const img = document.createElement("img");
         img.src = publicUrl.publicUrl;
-        img.style.animationDelay = `${index * 0.1}s`; // delay animasi biar keren
-
+        img.style.animationDelay = `${index * 0.1}s`;
         gallery.appendChild(img);
       });
+    }
+
+    async function uploadFile() {
+      const fileInput = document.getElementById("fileInput");
+      const file = fileInput.files[0];
+      if (!file) return alert("Pilih file dulu!");
+
+      const fileName = `${Date.now()}-${file.name}`;
+
+      let { error } = await supabase.storage
+        .from("uploads")
+        .upload(fileName, file, { cacheControl: "3600", upsert: false });
+
+      if (error) {
+        alert("Gagal upload: " + error.message);
+      } else {
+        alert("Upload berhasil!");
+        loadGallery();
+      }
     }
 
     loadGallery();
