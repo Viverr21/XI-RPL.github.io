@@ -114,6 +114,47 @@
   </div>
 
   <div class="gallery" id="gallery"></div>
+<input type="file" id="fileInput" />
+<button id="uploadBtn">Upload</button>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+  const supabase = createClient(
+    "https://YOUR_PROJECT_URL.supabase.co",
+    "YOUR_ANON_KEY"
+  );
+
+  document.getElementById("uploadBtn").addEventListener("click", async () => {
+    const fileInput = document.getElementById("fileInput");
+    const file = fileInput.files[0];
+    if (!file) return alert("Pilih file dulu!");
+
+    const { data, error } = await supabase.storage
+      .from("uploads")
+      .upload(`public/${file.name}`, file, {
+        cacheControl: "3600",
+        upsert: true
+      });
+
+    if (error) {
+      alert("Gagal upload: " + error.message);
+    } else {
+      const { data: publicUrl } = supabase.storage
+        .from("uploads")
+        .getPublicUrl(`public/${file.name}`);
+
+      alert("Upload berhasil!");
+      console.log(publicUrl.publicUrl);
+
+      // tampilkan di halaman
+      const img = document.createElement("img");
+      img.src = publicUrl.publicUrl;
+      img.width = 200;
+      document.body.appendChild(img);
+    }
+  });
+</script>
 
   <script>
     // Ganti ini dengan project kamu
@@ -172,6 +213,43 @@
     }
 
     loadGallery();
+    import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  "https://YOUR_PROJECT_URL.supabase.co",  // ganti dengan URL project kamu
+  "YOUR_ANON_KEY" // ganti dengan anon key
+);
+
+async function uploadFile(file) {
+  const { data, error } = await supabase.storage
+    .from("uploads") // nama bucket kamu
+    .upload(`public/${file.name}`, file, {
+      cacheControl: "3600",
+      upsert: false
+    });
+
+  if (error) {
+    console.error("Upload error:", error.message);
+    return;
+  }
+
+  console.log("Upload success:", data);
+
+  // ambil URL public
+  const { data: publicUrl } = supabase.storage
+    .from("uploads")
+    .getPublicUrl(`public/${file.name}`);
+
+  console.log("Public URL:", publicUrl.publicUrl);
+
+  // tampilkan di halaman
+  const img = document.createElement("img");
+  img.src = publicUrl.publicUrl;
+  img.width = 200;
+  document.body.appendChild(img);
+}
+
   </script>
 </body>
 </html>
+
