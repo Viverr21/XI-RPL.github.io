@@ -44,10 +44,11 @@
   <p class="mt-2 text-gray-300 text-lg italic">Kumpulan foto & video penuh animasi</p>
 
   <!-- Upload Section -->
-  <div class="upload mt-6">
-    <input type="file" id="fileInput" accept="image/*,video/*" multiple class="p-2 rounded bg-gray-800 text-sm">
-    <button onclick="uploadFiles()" class="ml-2 px-5 py-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400 hover:scale-105 transition">Upload 🚀</button>
-  </div>
+   <div class="upload mt-6">
+  <input type="file" id="fileInput" multiple class="hidden" onchange="uploadFiles(event)">
+  <button onclick="document.getElementById('fileInput').click()" 
+  class="ml-2 px-5 py-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400 hover:scale-105 transition"> Upload 🚀</button>
+     </div>
 <!-- Galeri -->
 <div id="gallery" class="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-11/12 max-w-6xl"></div>
 
@@ -159,6 +160,7 @@
 </script>
 </body>
 </html>
+
 
 
 
