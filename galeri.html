@@ -51,12 +51,16 @@
 <!-- Galeri -->
 <div id="gallery" class="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-11/12 max-w-6xl"></div>
 
+<!-- Modal -->
+<div id="modal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50">
+  <img id="modalImage" src="" class="w-full h-full object-contain">
+</div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-   const supabaseUrl = "https://uuzhhkjzjdwbjhbhhpvk.supabase.co";   // ganti project URL kamu
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1emhoa2p6amR3YmpoYmhocHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5MzY0NTksImV4cCI6MjA3MzUxMjQ1OX0.lYWtAd7-Tw7he6Q3AvIOShC9e76TDsq_WhClbd-GrM4";                   // ganti anon key
+  const supabaseUrl = "https://uuzhhkjzjdwbjhbhhpvk.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1emhoa2p6amR3YmpoYmhocHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5MzY0NTksImV4cCI6MjA3MzUxMjQ1OX0.lYWtAd7-Tw7he6Q3AvIOShC9e76TDsq_WhClbd-GrM4"; 
   const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
   async function uploadFiles() {
@@ -65,27 +69,37 @@
 
     for (const file of input.files) {
       const filePath = "kelasxirpl/" + Date.now() + "-" + file.name;
-      const { error } = await supabase.storage.from("uploads").upload(filePath, file, { upsert: true });
-      if (error) { alert("Upload gagal: " + error.message); continue; }
 
+      // upload ke supabase
+      const { error } = await supabase.storage.from("uploads").upload(filePath, file, { upsert: true });
+      if (error) { 
+        alert("Upload gagal: " + error.message); 
+        continue; 
+      }
+
+      // ambil public URL
       const { data: { publicUrl } } = supabase.storage.from("uploads").getPublicUrl(filePath);
 
+      // buat elemen galeri
       const div = document.createElement("div");
       div.className = "gallery-item bg-black/40 backdrop-blur-md p-3 rounded-xl";
+      div.style.animationDelay = `${Math.random() * 2}s`; // biar animasi ga serentak
 
       if (file.type.startsWith("image/")) {
-        div.innerHTML = `<img src="${publicUrl}" class="w-full h-auto rounded-lg cursor-pointer shadow-lg">`;
-        // tambahkan event klik untuk buka modal
+        div.innerHTML = `<img src="${publicUrl}" 
+                           class="w-full h-auto rounded-lg cursor-pointer shadow-lg">`;
         div.querySelector("img").onclick = () => openModal(publicUrl);
       } else {
-        div.innerHTML = `<video controls class="w-full"><source src="${publicUrl}" type="${file.type}"></video>`;
+        div.innerHTML = `<video controls class="w-full rounded-lg shadow-lg">
+                           <source src="${publicUrl}" type="${file.type}">
+                         </video>`;
       }
 
       gallery.appendChild(div);
     }
   }
 
-  // Fungsi modal
+  // Modal
   function openModal(url) {
     const modal = document.getElementById("modal");
     const modalImage = document.getElementById("modalImage");
@@ -94,7 +108,6 @@
     modal.classList.add("flex");
   }
 
-  // Tutup modal saat diklik
   document.getElementById("modal").onclick = () => {
     const modal = document.getElementById("modal");
     modal.classList.add("hidden");
@@ -102,30 +115,7 @@
   };
 </script>
 
-  <script>
-    function uploadFiles() {
-      const input = document.getElementById("fileInput");
-      const gallery = document.getElementById("gallery");
-
-      for (const file of input.files) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const div = document.createElement("div");
-          div.className = "gallery-item bg-black/40 backdrop-blur-md p-3 rounded-xl";
-          div.style.animationDelay = `${Math.random() * 2}s`; // delay random biar ga serentak
-
-          if (file.type.startsWith("image/")) {
-            div.innerHTML = `<img src="${e.target.result}" class="w-full h-auto shadow-lg">`;
-          } else if (file.type.startsWith("video/")) {
-            div.innerHTML = `<video controls class="w-full"><source src="${e.target.result}" type="${file.type}"></video>`;
-          }
-
-          gallery.appendChild(div);
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-  </script>
 
 </body>
 </html>
+
