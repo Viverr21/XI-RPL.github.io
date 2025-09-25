@@ -112,6 +112,37 @@
 
     gallery.prepend(div);
   }
+// Load semua file lama dari bucket
+async function loadGallery() {
+  const gallery = document.getElementById("gallery");
+  gallery.innerHTML = "";
+
+  const { data, error } = await supabase.storage.from("uploads").list("kelasxirpl", {
+    limit: 100,
+    sortBy: { column: "created_at", order: "desc" }
+  });
+
+  if (error) {
+    console.error("Gagal ambil file:", error.message);
+    return;
+  }
+
+  for (const item of data) {
+    const { data: { publicUrl } } = supabase
+      .storage
+      .from("uploads")
+      .getPublicUrl(`kelasxirpl/${item.name}`);
+
+    let type = "";
+    if (item.name.match(/\.(jpg|jpeg|png|gif)$/i)) type = "image";
+    else if (item.name.match(/\.(mp4|webm|ogg)$/i)) type = "video";
+
+    addToGallery(publicUrl, type, gallery);
+  }
+}
+
+// jalanin saat halaman pertama kali dibuka
+window.onload = loadGallery;
 
   // Modal preview gambar
   function openModal(url) {
@@ -131,6 +162,7 @@
 </script>
 </body>
 </html>
+
 
 
 
