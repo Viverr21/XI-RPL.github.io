@@ -57,66 +57,10 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const supabaseUrl = "https://uuzhhkjzjdwbjhbhhpvk.supabase.co";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1emhoa2p6amR3YmpoYmhocHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5MzY0NTksImV4cCI6MjA3MzUxMjQ1OX0.lYWtAd7-Tw7he6Q3AvIOShC9e76TDsq_WhClbd-GrM4"; // jangan service role!
-  const client = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-  async function uploadFiles() {
-    const input = document.getElementById("fileInput");
-    const gallery = document.getElementById("gallery");
-
-    for (const file of input.files) {
-      const filePath = "kelasxirpl/" + Date.now() + "-" + file.name;
-
-      // Upload ke Supabase
-      const { error } = await client.storage.from("uploads").upload(filePath, file, { upsert: true });
-      if (error) {
-        console.error("Upload gagal:", error.message);
-        alert("Upload gagal: " + error.message);
-        continue;
-      }
-
-      // Ambil public URL
-      const { data } = client.storage.from("uploads").getPublicUrl(filePath);
-      const publicUrl = data.publicUrl;
-
-      // Tambah ke galeri
-      const div = document.createElement("div");
-      div.className = "gallery-item bg-black/40 backdrop-blur-md p-3 rounded-xl";
-      div.style.animationDelay = `${Math.random() * 2}s`;
-
-      if (file.type.startsWith("image/")) {
-        div.innerHTML = `<img src="${publicUrl}" 
-                           class="w-full h-auto rounded-lg cursor-pointer shadow-lg">`;
-        div.querySelector("img").onclick = () => openModal(publicUrl);
-      } else {
-        div.innerHTML = `<video controls class="w-full rounded-lg shadow-lg">
-                           <source src="${publicUrl}" type="${file.type}">
-                         </video>`;
-      }
-
-      gallery.appendChild(div);
-    }
-  }
-
-  // Modal
-  function openModal(url) {
-    const modal = document.getElementById("modal");
-    const modalImage = document.getElementById("modalImage");
-    modalImage.src = url;
-    modal.classList.remove("hidden");
-    modal.classList.add("flex");
-  }
-
-  document.getElementById("modal").onclick = () => {
-    const modal = document.getElementById("modal");
-    modal.classList.add("hidden");
-    modal.classList.remove("flex");
-  };
-</script>
+<script src="storage.js"></script>
 </body>
 </html>
+
 
 
 
