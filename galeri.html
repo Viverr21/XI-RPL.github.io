@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Galeri XI-RPL</title>
+  <title>Galeri Animasi Dinamis</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-     body {
+    body {
       background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #6a0572);
       background-size: 400% 400%;
       animation: gradientMove 12s ease infinite;
@@ -38,80 +38,94 @@
     }
   </style>
 </head>
-<body>
-  <h1>📸 Galeri XI-RPL</h1>
+<body class="min-h-screen flex flex-col items-center text-white">
 
-  <div class="upload-box">
-    <input type="file" id="fileInput" />
-    <button id="uploadBtn">Upload</button>
+  <h1 class="text-5xl font-extrabold mt-10 drop-shadow-lg">🌌 Galeri XI-RPL 🌌</h1>
+  <p class="mt-2 text-gray-300 text-lg italic">Kumpulan foto & video penuh animasi</p>
+
+  <!-- Upload Section -->
+  <div class="upload mt-6">
+    <input type="file" id="fileInput" accept="image/*,video/*" multiple class="p-2 rounded bg-gray-800 text-sm">
+    <button onclick="uploadFiles()" class="ml-2 px-5 py-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400 hover:scale-105 transition">Upload 🚀</button>
   </div>
+<!-- Galeri -->
+<div id="gallery" class="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-11/12 max-w-6xl"></div>
 
-  <div class="gallery" id="gallery"></div>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    // Ganti dengan URL & Key dari Supabase project kamu
-    const supabase = createClient(
-      "https://uuzhhkjzjdwbjhbhhpvk.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1emhoa2p6amR3YmpoYmhocHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5MzY0NTksImV4cCI6MjA3MzUxMjQ1OX0.lYWtAd7-Tw7he6Q3AvIOShC9e76TDsq_WhClbd-GrM4"
-    );
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+   const supabaseUrl = "https://uuzhhkjzjdwbjhbhhpvk.supabase.co";   // ganti project URL kamu
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1emhoa2p6amR3YmpoYmhocHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5MzY0NTksImV4cCI6MjA3MzUxMjQ1OX0.lYWtAd7-Tw7he6Q3AvIOShC9e76TDsq_WhClbd-GrM4";                   // ganti anon key
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-    const bucketName = "uploads";
+  async function uploadFiles() {
+    const input = document.getElementById("fileInput");
+    const gallery = document.getElementById("gallery");
 
-    // Upload file
-    document.getElementById("uploadBtn").addEventListener("click", async () => {
-      const file = document.getElementById("fileInput").files[0];
-      if (!file) return alert("Pilih file dulu!");
+    for (const file of input.files) {
+      const filePath = "kelasxirpl/" + Date.now() + "-" + file.name;
+      const { error } = await supabase.storage.from("uploads").upload(filePath, file, { upsert: true });
+      if (error) { alert("Upload gagal: " + error.message); continue; }
 
-      const { data, error } = await supabase.storage
-        .from(bucketName)
-        .upload(`public/${Date.now()}-${file.name}`, file, { upsert: true });
+      const { data: { publicUrl } } = supabase.storage.from("uploads").getPublicUrl(filePath);
 
-      if (error) {
-        alert("Gagal upload: " + error.message);
+      const div = document.createElement("div");
+      div.className = "gallery-item bg-black/40 backdrop-blur-md p-3 rounded-xl";
+
+      if (file.type.startsWith("image/")) {
+        div.innerHTML = `<img src="${publicUrl}" class="w-full h-auto rounded-lg cursor-pointer shadow-lg">`;
+        // tambahkan event klik untuk buka modal
+        div.querySelector("img").onclick = () => openModal(publicUrl);
       } else {
-        alert("Upload berhasil!");
-        loadGallery();
-      }
-    });
-
-    // Ambil semua file di bucket & tampilkan
-    async function loadGallery() {
-      const { data, error } = await supabase.storage.from(bucketName).list("public", {
-        limit: 100,
-        offset: 0,
-      });
-
-      if (error) {
-        console.error("Error load:", error.message);
-        return;
+        div.innerHTML = `<video controls class="w-full"><source src="${publicUrl}" type="${file.type}"></video>`;
       }
 
-      const gallery = document.getElementById("gallery");
-      gallery.innerHTML = "";
-
-      data.forEach((file) => {
-        const { data: publicUrl } = supabase.storage
-          .from(bucketName)
-          .getPublicUrl(`public/${file.name}`);
-
-        const div = document.createElement("div");
-        div.className = "gallery-item";
-
-        if (file.name.match(/\.(mp4|webm|ogg)$/i)) {
-          div.innerHTML = `<video src="${publicUrl.publicUrl}" controls></video>`;
-        } else {
-          div.innerHTML = `<img src="${publicUrl.publicUrl}" alt="${file.name}" />`;
-        }
-
-        gallery.appendChild(div);
-      });
+      gallery.appendChild(div);
     }
+  }
 
-    // Load awal
-    loadGallery();
+  // Fungsi modal
+  function openModal(url) {
+    const modal = document.getElementById("modal");
+    const modalImage = document.getElementById("modalImage");
+    modalImage.src = url;
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  }
+
+  // Tutup modal saat diklik
+  document.getElementById("modal").onclick = () => {
+    const modal = document.getElementById("modal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  };
+</script>
+
+  <script>
+    function uploadFiles() {
+      const input = document.getElementById("fileInput");
+      const gallery = document.getElementById("gallery");
+
+      for (const file of input.files) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const div = document.createElement("div");
+          div.className = "gallery-item bg-black/40 backdrop-blur-md p-3 rounded-xl";
+          div.style.animationDelay = `${Math.random() * 2}s`; // delay random biar ga serentak
+
+          if (file.type.startsWith("image/")) {
+            div.innerHTML = `<img src="${e.target.result}" class="w-full h-auto shadow-lg">`;
+          } else if (file.type.startsWith("video/")) {
+            div.innerHTML = `<video controls class="w-full"><source src="${e.target.result}" type="${file.type}"></video>`;
+          }
+
+          gallery.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
   </script>
+
 </body>
 </html>
-
