@@ -8,7 +8,7 @@ const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 // Fungsi upload file
 async function uploadFile(file) {
   const { data, error } = await supabase.storage
-    .from('namabucket')       // ganti sesuai bucket di Supabase
+    .from('uploads')       // ganti sesuai bucket di Supabase
     .upload('uploads/' + file.name, file, {
       cacheControl: '3600',
       upsert: false,
@@ -40,4 +40,5 @@ async function listFiles() {
     supabase.storage.from('namabucket').getPublicUrl('uploads/' + file.name).data.publicUrl
   );
 }
+
 
