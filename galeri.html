@@ -57,9 +57,109 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="storage.js"></script>
+<script>
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+<script>
+  // 🔑 Ganti dengan info project kamu
+  const SUPABASE_URL = "https://uuzhhkjzjdwbjhbhhpvk.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1emhoa2p6amR3YmpoYmhocHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5MzY0NTksImV4cCI6MjA3MzUxMjQ1OX0.lYWtAd7-Tw7he6Q3AvIOShC9e76TDsq_WhClbd-GrM4";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const BUCKET = "uploads";      // nama bucket
+  const FOLDER = "public";   // folder di bucket
+
+  // Upload file ke Supabase
+  async function uploadFiles(event) {
+    const files = event.target.files;
+    const gallery = document.getElementById("gallery");
+
+    for (const file of files) {
+      const filePath = `${FOLDER}/${Date.now()}-${file.name}`;
+      const { error: uploadError } = await supabase
+        .storage
+        .from(BUCKET)
+        .upload(filePath, file);
+
+      if (uploadError) {
+        alert("Upload gagal: " + uploadError.message);
+        return;
+      }
+
+      // Ambil URL public
+      const { data: { publicUrl } } = supabase
+        .storage
+        .from(BUCKET)
+        .getPublicUrl(filePath);
+
+      addToGallery(publicUrl, file.type, gallery);
+    }
+  }
+
+  // Tambahkan item ke galeri
+  function addToGallery(url, type, gallery) {
+    const div = document.createElement("div");
+    div.className = "gallery-item bg-black/40 backdrop-blur-md p-3 rounded-xl";
+
+    if (type.startsWith("image/")) {
+      div.innerHTML = `<img src="${url}" class="w-full h-auto rounded-lg cursor-pointer shadow-lg">`;
+      div.querySelector("img").onclick = () => openModal(url);
+    } else if (type.startsWith("video/")) {
+      div.innerHTML = `<video controls class="w-full rounded-lg shadow-lg">
+                         <source src="${url}">
+                       </video>`;
+    }
+
+    gallery.prepend(div);
+  }
+
+  // Load semua file lama dari bucket
+  async function loadGallery() {
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = "";
+
+    const { data, error } = await supabase.storage.from(BUCKET).list(FOLDER, {
+      limit: 100,
+      sortBy: { column: "created_at", order: "desc" }
+    });
+
+    if (error) {
+      console.error("Gagal ambil file:", error.message);
+      return;
+    }
+
+    for (const item of data) {
+      const { data: { publicUrl } } = supabase
+        .storage
+        .from(BUCKET)
+        .getPublicUrl(`${FOLDER}/${item.name}`);
+
+      let type = "";
+      if (item.name.match(/\.(jpg|jpeg|png|gif)$/i)) type = "image";
+      else if (item.name.match(/\.(mp4|webm|ogg)$/i)) type = "video";
+
+      addToGallery(publicUrl, type, gallery);
+    }
+  }
+
+  // Modal preview gambar
+  function openModal(url) {
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modal-img");
+    modal.style.display = "flex";
+    modalImg.src = url;
+  }
+  function closeModal() {
+    document.getElementById("modal").style.display = "none";
+  }
+
+  // Jalankan saat halaman pertama kali dibuka
+  window.onload = loadGallery;
+</script>
+
+</script>
 </body>
 </html>
+
 
 
 
