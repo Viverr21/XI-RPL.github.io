@@ -1,174 +1,170 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Galeri Animasi Dinamis</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galeri XI RPL 🚀</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
   <style>
-    body {
-      background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #6a0572);
-      background-size: 400% 400%;
-      animation: gradientMove 12s ease infinite;
+    /* animasi fade + zoom */
+    .fade-in {
+      animation: fadeIn 0.8s ease forwards;
+      opacity: 0;
+      transform: scale(0.9);
     }
-
-    @keyframes gradientMove {
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    /* animasi background gradasi */
+    body {
+      background: linear-gradient(270deg, #9333ea, #ec4899, #06b6d4);
+      background-size: 600% 600%;
+      animation: gradient 15s ease infinite;
+    }
+    @keyframes gradient {
       0% {background-position: 0% 50%;}
       50% {background-position: 100% 50%;}
       100% {background-position: 0% 50%;}
     }
-
-    .gallery-item {
-      animation: floaty 6s ease-in-out infinite;
-      transition: transform 0.5s ease, box-shadow 0.5s ease;
-    }
-
-    .gallery-item:hover {
-      transform: rotateY(8deg) scale(1.1);
-      box-shadow: 0 15px 30px rgba(0, 255, 255, 0.8);
-    }
-
-    @keyframes floaty {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-
-    video, img {
-      border-radius: 15px;
-    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center text-white">
+<body class="min-h-screen text-white flex flex-col items-center p-6">
+  <h1 class="text-4xl font-bold mb-6 drop-shadow-lg">📸 Galeri XI RPL 🚀</h1>
 
-  <h1 class="text-4xl font-extrabold mt-10 drop-shadow-lg">🌌 Galeri XI-RPL 🌌</h1>
-  <p class="mt-2 text-gray-300 text-lg italic">Kumpulan foto & video penuh animasi</p>
+  <!-- Upload -->
+  <div class="mb-6 flex gap-2">
+    <input type="file" id="fileInput" multiple
+      class="px-4 py-2 rounded-lg bg-white/20 backdrop-blur-md border border-white/30" />
+    <button onclick="uploadFiles()"
+      class="px-6 py-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400 hover:scale-105 transition transform shadow-lg">
+      Upload 🚀
+    </button>
+  </div>
 
-  <!-- Upload Section -->
-   <div class="upload mt-6">
-  <input type="file" id="fileInput" multiple class="hidden" onchange="uploadFiles(event)">
-  <button onclick="document.getElementById('fileInput').click()" 
-  class="ml-2 px-5 py-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400 hover:scale-105 transition"> Upload 🚀</button>
-     </div>
-<!-- Galeri -->
-<div id="gallery" class="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-11/12 max-w-6xl"></div>
+  <!-- Galeri -->
+  <div id="gallery"
+       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full max-w-6xl">
+  </div>
 
-<!-- Modal -->
-<div id="modal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50">
-  <img id="modalImage" src="" class="w-full h-full object-contain">
-</div>
+  <!-- Modal -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50">
+    <div class="relative max-w-4xl w-11/12">
+      <button onclick="closeModal()" class="absolute -top-10 right-0 text-white text-2xl">✖</button>
+      <img id="modalImage" class="max-h-[80vh] mx-auto rounded-xl shadow-xl hidden" />
+      <video id="modalVideo" controls class="max-h-[80vh] mx-auto rounded-xl shadow-xl hidden"></video>
+    </div>
+  </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  <script src="https://unpkg.com/@supabase/supabase-js"></script>
-<script>
-  // 🔑 Ganti dengan info project kamu
+  // 🔑 Ganti dengan URL & anon key dari project Supabase kamu
   const SUPABASE_URL = "https://uuzhhkjzjdwbjhbhhpvk.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1emhoa2p6amR3YmpoYmhocHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5MzY0NTksImV4cCI6MjA3MzUxMjQ1OX0.lYWtAd7-Tw7he6Q3AvIOShC9e76TDsq_WhClbd-GrM4";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1emhoa2p6amR3YmpoYmhocHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5MzY0NTksImV4cCI6MjA3MzUxMjQ1OX0.lYWtAd7-Tw7he6Q3AvIOShC9e76TDsq_WhClbd-GrM4";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const BUCKET = "uploads";      // nama bucket
-  const FOLDER = "kelasxirpl";   // folder di bucket
+  // upload file
+  async function uploadFiles() {
+    const files = document.getElementById("fileInput").files;
+    if (!files.length) return alert("Pilih file dulu!");
 
-  // Upload file ke Supabase
-  async function uploadFiles(event) {
-    const files = event.target.files;
-    const gallery = document.getElementById("gallery");
+    for (let file of files) {
+      const filePath = `kelasxirpl/${Date.now()}_${file.name}`;
+      const { error } = await supabase.storage.from("uploads").upload(filePath, file);
 
-    for (const file of files) {
-      const filePath = `${FOLDER}/${Date.now()}-${file.name}`;
-      const { error: uploadError } = await supabase
-        .storage
-        .from(BUCKET)
-        .upload(filePath, file);
-
-      if (uploadError) {
-        alert("Upload gagal: " + uploadError.message);
-        return;
+      if (error) {
+        console.error("Upload gagal:", error.message);
+        alert("Gagal upload: " + error.message);
+      } else {
+        const { data } = supabase.storage.from("uploads").getPublicUrl(filePath);
+        let type = "";
+        if (/\.(jpg|jpeg|png|gif)$/i.test(file.name)) type = "image";
+        else if (/\.(mp4|webm|ogg)$/i.test(file.name)) type = "video";
+        addToGallery(data.publicUrl, type);
       }
+    }
+  }
 
-      // Ambil URL public
+  // load semua file dari bucket
+  async function loadGallery() {
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = "";
+
+    const { data, error } = await supabase.storage.from("uploads").list("kelasxirpl", {
+      limit: 100,
+      sortBy: { column: "created_at", order: "desc" }
+    });
+
+    if (error) {
+      console.error("Gagal ambil file:", error.message);
+      return;
+    }
+
+    for (const item of data) {
       const { data: { publicUrl } } = supabase
         .storage
-        .from(BUCKET)
-        .getPublicUrl(filePath);
+        .from("uploads")
+        .getPublicUrl(`kelasxirpl/${item.name}`);
 
-      addToGallery(publicUrl, file.type, gallery);
+      let type = "";
+      if (/\.(jpg|jpeg|png|gif)$/i.test(item.name)) type = "image";
+      else if (/\.(mp4|webm|ogg)$/i.test(item.name)) type = "video";
+
+      addToGallery(publicUrl, type);
     }
   }
 
-  // Tambahkan item ke galeri
-  function addToGallery(url, type, gallery) {
+  // tampilkan item ke galeri
+  function addToGallery(url, type) {
+    const gallery = document.getElementById("gallery");
     const div = document.createElement("div");
-    div.className = "gallery-item bg-black/40 backdrop-blur-md p-3 rounded-xl";
+    div.className = "relative overflow-hidden rounded-2xl shadow-lg cursor-pointer transform hover:scale-105 transition fade-in";
 
-    if (type.startsWith("image/")) {
-      div.innerHTML = `<img src="${url}" class="w-full h-auto rounded-lg cursor-pointer shadow-lg">`;
-      div.querySelector("img").onclick = () => openModal(url);
-    } else if (type.startsWith("video/")) {
-      div.innerHTML = `<video controls class="w-full rounded-lg shadow-lg">
-                         <source src="${url}">
-                       </video>`;
+    if (type === "image") {
+      const img = document.createElement("img");
+      img.src = url;
+      img.className = "w-full h-56 object-cover";
+      img.onclick = () => openModal(url, "image");
+      div.appendChild(img);
+    } else if (type === "video") {
+      const vid = document.createElement("video");
+      vid.src = url;
+      vid.className = "w-full h-56 object-cover";
+      vid.muted = true;
+      vid.loop = true;
+      vid.autoplay = true;
+      vid.onclick = () => openModal(url, "video");
+      div.appendChild(vid);
     }
 
-    gallery.prepend(div);
-  }
-// Load semua file lama dari bucket
-async function loadGallery() {
-  const gallery = document.getElementById("gallery");
-  gallery.innerHTML = "";
-
-  const { data, error } = await supabase.storage.from("uploads").list("kelasxirpl", {
-    limit: 100,
-    sortBy: { column: "created_at", order: "desc" }
-  });
-
-  if (error) {
-    console.error("Gagal ambil file:", error.message);
-    return;
+    gallery.appendChild(div);
   }
 
-  for (const item of data) {
-    const { data: { publicUrl } } = supabase
-      .storage
-      .from("uploads")
-      .getPublicUrl(`kelasxirpl/${item.name}`);
+  // modal
+  function openModal(url, type) {
+    document.getElementById("modal").classList.remove("hidden");
+    const img = document.getElementById("modalImage");
+    const vid = document.getElementById("modalVideo");
+    img.classList.add("hidden");
+    vid.classList.add("hidden");
 
-    let type = "";
-    if (item.name.match(/\.(jpg|jpeg|png|gif)$/i)) type = "image";
-    else if (item.name.match(/\.(mp4|webm|ogg)$/i)) type = "video";
-
-    addToGallery(publicUrl, type, gallery);
-  }
-}
-
-// jalanin saat halaman pertama kali dibuka
-window.onload = loadGallery;
-
-  // Modal preview gambar
-  function openModal(url) {
-    const modal = document.getElementById("modal");
-    const modalImg = document.getElementById("modal-img");
-    modal.style.display = "flex";
-    modalImg.src = url;
+    if (type === "image") {
+      img.src = url;
+      img.classList.remove("hidden");
+    } else {
+      vid.src = url;
+      vid.classList.remove("hidden");
+    }
   }
   function closeModal() {
-    document.getElementById("modal").style.display = "none";
+    document.getElementById("modal").classList.add("hidden");
+    document.getElementById("modalVideo").pause();
   }
 
-  // Jalankan saat halaman pertama kali dibuka
+  // load otomatis pas halaman dibuka
   window.onload = loadGallery;
-</script>
-
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
